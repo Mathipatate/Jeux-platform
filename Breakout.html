@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Breakout en JavaScript avec Score et Interaction</title>
+  <style>
+
+
+    /* Style du canvas */
+    canvas {
+      background: #eee;
+      display: block;
+      margin: 0 auto;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="480" height="320"></canvas>
+  <script>
+    // Récupération du canvas et du contexte
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    // Paramètres de la balle
+    const ballRadius = 10;
+    let x = canvas.width / 2;
+    let y = canvas.height - 30;
+    let dx = 2;
+    let dy = -2;
+
+    // Paramètres de la palette
+    const paddleHeight = 10;
+    const paddleWidth = 75;
+    let paddleX = (canvas.width - paddleWidth) / 2;
+
+    // Variables pour le contrôle clavier
+    let rightPressed = false;
+    let leftPressed = false;
+
+    // Paramètres des briques
+    const brickRowCount = 3;
+    const brickColumnCount = 5;
+    const brickWidth = 75;
+    const brickHeight = 20;
+    const brickPadding = 10;
+    const brickOffsetTop = 30;
+    const brickOffsetLeft = 30;
+    const bricks = [];
+
+    for (let c = 0; c < brickColumnCount; c++) {
+      bricks[c] = [];
+      for (let r = 0; r < brickRowCount; r++) {
+        // status : 1 = brique visible (bleue), 2 = brique touchée (rouge), 0 = brique disparue
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
+      }
+    }
+
+    // Score
+    let score = 0;
+
+    // Gestion des événements clavier
+    document.addEventListener("keydown", keyDownHandler, false);
+    document.addEventListener("keyup", keyUpHandler, false);
+
+    function keyDownHandler(e) {
+      console.log("Touche appuyée :", e.key);
+      if (e.key === "Right" || e.key === "ArrowRight") {
+        rightPressed = true;
+      } else if (e.key === "Left" || e.key === "ArrowLeft") {
+        leftPressed = true;
+      }
+    }
+
+    function keyUpHandler(e) {
+      console.log("Touche relâchée :", e.key);
+      if (e.key === "Right" || e.key === "ArrowRight") {
+        rightPressed = false;
+      } else if (e.key === "Left" || e.key === "ArrowLeft") {
+        leftPressed = false;
+      }
+    }
+
+    // Fonction pour dessiner les briques
+    function drawBricks() {
+      for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+          let b = bricks[c][r];
+          if (b.status > 0) {  // Afficher si la brique est visible ou en phase d'animation
+            let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
+            let brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
+            b.x = brickX;
+            b.y = brickY;
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            // Couleur en fonction du statut
+            if (b.status === 1) {
+              ctx.fillStyle = "#0095DD"; // couleur initiale
+            } else if (b.status === 2) {
+              ctx.fillStyle = "red";     // brique touchée
+            }
+            ctx.fill();
+            ctx.closePath();
+          }
+        }
+      }
+    }
+
+    // Fonction de détection de collision entre la balle et les briques
+    function collisionDetection() {
+      for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+          let b = bricks[c][r];
+          if (b.status === 1) {
+            if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+              dy = -dy;
+              b.status = 2; // La brique devient rouge
+              score++;     // Augmente le score
+              // Après 50 ms, la brique disparaît
+              setTimeout(() => {
+                b.status = 0;
+              }, 50);
+            }
+          }
+        }
+      }
+    }
+
+    // Fonction pour dessiner la balle
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Fonction pour dessiner la palette
+    function drawPaddle() {
+      ctx.beginPath();
+      ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Fonction pour dessiner le score
+    function drawScore() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#0095DD";
+      ctx.fillText("Score: " + score, 8, 20);
+    }
+
+    // Boucle de dessin principale
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBricks();
+      drawBall();
+      drawPaddle();
+      drawScore();
+      collisionDetection();
+
+      // Changement de direction de la balle lors de la collision avec les murs
+      if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+        dx = -dx;
+      }
+      if (y + dy < ballRadius) {
+        dy = -dy;
+      } else if (y + dy > canvas.height - ballRadius) {
+        // Vérification si la balle touche la palette
+        if (x > paddleX && x < paddleX + paddleWidth) {
+          dy = -dy;
+        } else {
+          // Fin de partie
+          alert("Perdu !");
+          document.location.reload();
+          return; // Arrêter la boucle de dessin
+        }
+      }
+
+      // Mise à jour de la position de la balle
+      x += dx;
+      y += dy;
+
+      // Déplacement de la palette
+      if (rightPressed && paddleX < canvas.width - paddleWidth) {
+        paddleX += 7;
+      } else if (leftPressed && paddleX > 0) {
+        paddleX -= 7;
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    // Lancement du jeu
+    draw();
+  </script>
+</body>
+</html>
