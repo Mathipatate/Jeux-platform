@@ -24,8 +24,29 @@
     <canvas id="gameCanvas" width="1000" height="750"></canvas>
 
     <script>
+      let rightPressed = false;
+      let leftPressed = false;
+      let squareX = 20;
+      const squareHeight = 20;
+      const squareWidth = 20;
       const canvas = document.getElementById("gameCanvas");
       const ctx = canvas.getContext("2d");
+
+      function drawSquare() {
+        ctx.beginPath();
+        ctx.rect(
+          squareX,
+          canvas.height - squareHeight,
+          squareWidth,
+          squareHeight
+        );
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+      }
+      
+
+      drawSquare();
     </script>
   </body>
 </html>

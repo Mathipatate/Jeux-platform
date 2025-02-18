@@ -158,6 +158,9 @@
       drawBall();
       drawPaddle();
       drawScore();
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#0095DD";
+      ctx.fillText("garcon", 200, 50);
       collisionDetection();
 
       // Changement de direction de la balle lors de la collision avec les murs
