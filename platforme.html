@@ -68,8 +68,7 @@
       }
 
       function draw() {
-        console.log(rightPressed)
-        if (rightPressed) {
+        if (rightPressed  && squareX < canvas.width - squareWidth) {
           squareX += 7;
           drawSquare()
         } else if (leftPressed && squareX > 0) {
