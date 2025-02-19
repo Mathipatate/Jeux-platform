@@ -51,7 +51,7 @@
       function keyDownHandler(e) {
         console.log("Touche appuyée :", e.key);
         if (e.key === "Right" || e.key === "ArrowRight") {
-            console.log("peut")
+          console.log("peut");
           rightPressed = true;
         } else if (e.key === "Left" || e.key === "ArrowLeft") {
           leftPressed = true;
@@ -68,14 +68,15 @@
       }
 
       function draw() {
-        if (rightPressed  && squareX < canvas.width - squareWidth) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (rightPressed && squareX < canvas.width - squareWidth) {
           squareX += 7;
-          drawSquare()
         } else if (leftPressed && squareX > 0) {
           squareX -= 7;
         }
 
-        requestAnimationFrame(draw);
+        drawSquare();
       }
 
       draw();
