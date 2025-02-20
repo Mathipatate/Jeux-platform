@@ -24,26 +24,22 @@
     <canvas id="gameCanvas" width="1000" height="750"></canvas>
 
     <script>
-      let rightPressed = false;
-      let leftPressed = false;
-      let squareX = 20;
-      const squareHeight = 20;
-      const squareWidth = 20;
       const canvas = document.getElementById("gameCanvas");
       const ctx = canvas.getContext("2d");
 
+      let squareX = 20;
+      const squareWidth = 20;
+      const squareHeight = 20;
+      let rightPressed = false;
+      let leftPressed = false;
+
       function drawSquare() {
-        ctx.beginPath();
-        ctx.rect(
-          squareX,
-          canvas.height - squareHeight,
-          squareWidth,
-          squareHeight
-        );
-        ctx.fillStyle = "red";
-        ctx.fill();
-        ctx.closePath();
-      }
+      ctx.beginPath();
+      ctx.rect(squareX, canvas.height - squareHeight, squareWidth, squareHeight);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.closePath();
+    }
 
       document.addEventListener("keydown", keyDownHandler, false);
       document.addEventListener("keyup", keyUpHandler, false);
@@ -51,7 +47,6 @@
       function keyDownHandler(e) {
         console.log("Touche appuyée :", e.key);
         if (e.key === "Right" || e.key === "ArrowRight") {
-          console.log("peut");
           rightPressed = true;
         } else if (e.key === "Left" || e.key === "ArrowLeft") {
           leftPressed = true;
@@ -66,13 +61,19 @@
           leftPressed = false;
         }
       }
+      
 
       function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         if (rightPressed && squareX < canvas.width - squareWidth) {
           squareX += 7;
+          console.log("oh");
         } else if (leftPressed && squareX > 0) {
           squareX -= 7;
         }
+        drawSquare();
+        requestAnimationFrame(draw);
       }
 
       draw();
