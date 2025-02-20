@@ -28,7 +28,7 @@
       const ctx = canvas.getContext("2d");
 
       let squareX = 20;
-      const squareWidth = 20;
+      const squareWidth = -20;
       const squareHeight = 20;
       let rightPressed = false;
       let leftPressed = false;
@@ -39,12 +39,7 @@
 
       function drawSquare() {
         ctx.beginPath();
-        ctx.rect(
-          squareX,
-          canvas.height - squareHeight,
-          squareWidth,
-          squareHeight
-        );
+        ctx.rect(squareX, canvas.height - squareHeight, squareWidth, squareHeight);
         ctx.fillStyle = "red";
         ctx.fill();
         ctx.closePath();
@@ -52,12 +47,7 @@
 
       function drawStar() {
         ctx.beginPath();
-        ctx.rect(
-          starX,
-          canvas.height - starHeight,
-          starWidth,
-          starHeight
-        );
+        ctx.rect(starX, canvas.height - starHeight, starWidth, starHeight);
         ctx.fillStyle = "yellow";
         ctx.fill();
         ctx.closePath();
@@ -93,7 +83,8 @@
           squareX -= 7;
         }
         drawSquare();
-        drawStar()
+        drawStar();
+        starX = squareX + Math.random() * (canvas.width - squareX - starWidth);
         requestAnimationFrame(draw);
       }
 
