@@ -33,13 +33,35 @@
       let rightPressed = false;
       let leftPressed = false;
 
+      let starX = 20;
+      const starWidth = 20;
+      const starHeight = 20;
+
       function drawSquare() {
-      ctx.beginPath();
-      ctx.rect(squareX, canvas.height - squareHeight, squareWidth, squareHeight);
-      ctx.fillStyle = "red";
-      ctx.fill();
-      ctx.closePath();
-    }
+        ctx.beginPath();
+        ctx.rect(
+          squareX,
+          canvas.height - squareHeight,
+          squareWidth,
+          squareHeight
+        );
+        ctx.fillStyle = "red";
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      function drawStar() {
+        ctx.beginPath();
+        ctx.rect(
+          starX,
+          canvas.height - starHeight,
+          starWidth,
+          starHeight
+        );
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+        ctx.closePath();
+      }
 
       document.addEventListener("keydown", keyDownHandler, false);
       document.addEventListener("keyup", keyUpHandler, false);
@@ -61,23 +83,21 @@
           leftPressed = false;
         }
       }
-      
 
       function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (rightPressed && squareX < canvas.width - squareWidth) {
           squareX += 7;
-          console.log("oh");
         } else if (leftPressed && squareX > 0) {
           squareX -= 7;
         }
         drawSquare();
+        drawStar()
         requestAnimationFrame(draw);
       }
 
       draw();
-      drawSquare();
     </script>
   </body>
 </html>
