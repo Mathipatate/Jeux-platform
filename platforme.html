@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,20 +24,19 @@
     <canvas id="gameCanvas" width="1000" height="750"></canvas>
 
     <script>
+      let score = 0;
       const canvas = document.getElementById("gameCanvas");
       const ctx = canvas.getContext("2d");
 
       let squareX = 20;
-      const squareWidth = -20;
+      const squareWidth = 20; 
       const squareHeight = 20;
       let rightPressed = false;
       let leftPressed = false;
 
-      let starX = 20;
+      let starX = Math.random() * (canvas.width - 20); 
       const starWidth = 20;
       const starHeight = 20;
-<<<<<<< HEAD
-      starX = squareX + Math.random() * (canvas.width - squareX - starWidth);
 
       function drawSquare() {
         ctx.beginPath();
@@ -47,12 +46,6 @@
           squareWidth,
           squareHeight
         );
-=======
-
-      function drawSquare() {
-        ctx.beginPath();
-        ctx.rect(squareX, canvas.height - squareHeight, squareWidth, squareHeight);
->>>>>>> jeux_platform_V2
         ctx.fillStyle = "red";
         ctx.fill();
         ctx.closePath();
@@ -60,7 +53,6 @@
 
       function drawStar() {
         ctx.beginPath();
-<<<<<<< HEAD
         ctx.arc(
           starX + starWidth / 2,
           canvas.height - starHeight / 2,
@@ -68,19 +60,21 @@
           0,
           Math.PI * 2
         );
-=======
-        ctx.rect(starX, canvas.height - starHeight, starWidth, starHeight);
->>>>>>> jeux_platform_V2
         ctx.fillStyle = "yellow";
         ctx.fill();
         ctx.closePath();
+      }
+
+      function drawScore() {
+        ctx.font = "16px Arial";
+        ctx.fillStyle = "black";
+        ctx.fillText("Score: " + score, 8, 20);
       }
 
       document.addEventListener("keydown", keyDownHandler, false);
       document.addEventListener("keyup", keyUpHandler, false);
 
       function keyDownHandler(e) {
-        console.log("Touche appuyée :", e.key);
         if (e.key === "Right" || e.key === "ArrowRight") {
           rightPressed = true;
         } else if (e.key === "Left" || e.key === "ArrowLeft") {
@@ -89,11 +83,22 @@
       }
 
       function keyUpHandler(e) {
-        console.log("Touche relâchée :", e.key);
         if (e.key === "Right" || e.key === "ArrowRight") {
           rightPressed = false;
         } else if (e.key === "Left" || e.key === "ArrowLeft") {
           leftPressed = false;
+        }
+      }
+
+      function collisionDetection() {
+        const carreGauche = squareX;
+        const carreDroite = squareX + squareWidth;
+        const etoileGauche = starX;
+        const etoileDroite = starX + starWidth;
+        
+        if (carreDroite >= etoileGauche && carreGauche <= etoileDroite) {
+          score++;
+          starX = Math.random() * (canvas.width - starWidth);
         }
       }
 
@@ -105,12 +110,11 @@
         } else if (leftPressed && squareX > 0) {
           squareX -= 7;
         }
+
+        collisionDetection();  
         drawSquare();
         drawStar();
-<<<<<<< HEAD
-=======
-        starX = squareX + Math.random() * (canvas.width - squareX - starWidth);
->>>>>>> jeux_platform_V2
+        drawScore();  
         requestAnimationFrame(draw);
       }
 
