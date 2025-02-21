@@ -36,6 +36,7 @@
       let starX = 20;
       const starWidth = 20;
       const starHeight = 20;
+<<<<<<< HEAD
       starX = squareX + Math.random() * (canvas.width - squareX - starWidth);
 
       function drawSquare() {
@@ -46,6 +47,12 @@
           squareWidth,
           squareHeight
         );
+=======
+
+      function drawSquare() {
+        ctx.beginPath();
+        ctx.rect(squareX, canvas.height - squareHeight, squareWidth, squareHeight);
+>>>>>>> jeux_platform_V2
         ctx.fillStyle = "red";
         ctx.fill();
         ctx.closePath();
@@ -53,6 +60,7 @@
 
       function drawStar() {
         ctx.beginPath();
+<<<<<<< HEAD
         ctx.arc(
           starX + starWidth / 2,
           canvas.height - starHeight / 2,
@@ -60,6 +68,9 @@
           0,
           Math.PI * 2
         );
+=======
+        ctx.rect(starX, canvas.height - starHeight, starWidth, starHeight);
+>>>>>>> jeux_platform_V2
         ctx.fillStyle = "yellow";
         ctx.fill();
         ctx.closePath();
@@ -96,6 +107,10 @@
         }
         drawSquare();
         drawStar();
+<<<<<<< HEAD
+=======
+        starX = squareX + Math.random() * (canvas.width - squareX - starWidth);
+>>>>>>> jeux_platform_V2
         requestAnimationFrame(draw);
       }
 
